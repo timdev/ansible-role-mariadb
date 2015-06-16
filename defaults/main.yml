@@ -1,0 +1,27 @@
+# ALL PRIVILEGES granted to root@ each of these hosts
+mariadb_root_hosts:
+  - "{{ ansible_hostname }}"
+  - 127.0.0.1
+  - ::1
+  - localhost
+
+# What IP should mariadb listen on?
+mariadb_bind_addr: 127.0.0.1
+
+# Root password will always be this
+mariadb_root_password: ''
+
+# Root and {{ mariadb_dev_user }} user (if set) will get this as default host (in ~/my.cnf)
+mariadb_client_host: 127.0.0.1
+
+# User account to drop a .my.cnf file for, if present.
+mariadb_dev_user: tim
+
+# InnoDB configuration defaults
+innodb_buffer_pool_size: 64M
+innodb_log_buffer_size: 8M
+innodb_file_per_table: 1
+innodb_open_files: 400
+innodb_io_capacity: 400
+innodb_flush_method: O_DIRECT
+innodb_lock_wait_timeout: 60

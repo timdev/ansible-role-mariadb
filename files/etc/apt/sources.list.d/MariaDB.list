@@ -1,0 +1,4 @@
+# MariaDB 10.0 repository list - created 2014-12-14 22:05 UTC
+# http://mariadb.org/mariadb/repositories/
+deb http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main
+deb-src http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main

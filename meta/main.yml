@@ -1,0 +1,7 @@
+---
+galaxy_info:
+  author: Tim Lieberman <tim@timdev.com>
+  description: Ensure MariaDB 10 is installed.
+  license: MIT
+  min_ansible_version: 1.9
+dependencies: []
