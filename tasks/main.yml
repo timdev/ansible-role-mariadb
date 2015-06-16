@@ -1,2 +1,46 @@
 ---
-# tasks file for ansible-role-mariadb
+- name: Ensure python-software-properties is installed
+  apt: pkg=python-software-properties state=present
+
+- name: Ensure we have mariadb's apt key
+  action: apt_key data="{{ lookup('file', 'GPG-KEY-mariadb') }}" state=present
+
+- name: Ensure apt knows about mariadb mirror
+  apt_repository: repo='deb http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main' state=present
+
+- name: ensure python-software-properties is installed
+  apt: pkg=python-software-properties state=present
+
+- name: Ensure we have mariadb's apt key
+  action: apt_key data="{{ lookup('file', 'GPG-KEY-mariadb') }}" state=present
+
+- name: ensure apt knows about mariadb mirror
+  apt_repository: repo='deb http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.0/debian wheezy main' state=present
+
+- name: Ensure mariadb is installed
+  apt: pkg=mariadb-server state=present update_cache=yes
+  register: installed_mariadb
+
+- name: Ensure mariadb is configured
+  template: src=etc/mysql/conf.d/{{ item }}.cnf dest=/etc/mysql/conf.d/{{ item }}.cnf
+  with_items:
+    - general
+    - innodb
+  notify: restart mariadb
+
+- name: Ensure mariadb is running
+  service: name=mysql state=running
+
+- name: Ensure ~/.my.cnf exists
+  template: src=devuser-.my.cnf dest=/home/{{ mariadb_dev_user }}/.my.cnf
+  when: mariadb_dev_user != ''
+
+- name: Ensure /root/.my.cnf exists
+  template: src=devuser-.my.cnf dest=/root/.my.cnf
+
+- name: ensure python-mysqldb is present
+  apt: pkg=python-mysqldb state=present
+
+- name: ensure root account is passworded
+  mysql_user: check_implicit_admin=yes name=root password="{{ mariadb_root_password }}" host={{ item }}  priv=*.*:ALL,GRANT
+  with_items: "{{ mariadb_root_hosts }}"
